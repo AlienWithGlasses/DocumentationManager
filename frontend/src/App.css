@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Spectral:wght@400;600;700&display=swap');
+
+:root {
+  /* Color System - Technical documentation palette */
+  --primary: #0066cc;
+  --primary-dark: #0052a3;
+  --primary-light: #3385d6;
+  
+  --surface-1: #ffffff;
+  --surface-2: #f8f9fa;
+  --surface-3: #e9ecef;
+  --surface-4: #dee2e6;
+  
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a5568;
+  --text-tertiary: #718096;
+  
+  --border: #e2e8f0;
+  --border-hover: #cbd5e0;
+  
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  
+  --code-bg: #1e1e1e;
+  --code-inline: #f1f5f9;
+  
+  /* Typography */
+  --font-display: 'Spectral', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  
+  /* Layout */
+  --sidebar-width: 280px;
+  --max-content-width: 900px;
+  
+  /* Effects */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  
+  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--surface-2);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+}
+
+/* App Layout */
+.app {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--surface-1);
+}
+
+/* Loading States */
+.loading-state,
+.error-state,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--space-2xl);
+  text-align: center;
+}
+
+.loading-state p,
+.error-state p {
+  margin-top: var(--space-md);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.error-state button {
+  margin-top: var(--space-lg);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.error-state button:hover {
+  background: var(--primary-dark);
+}
+
+.empty-state h2 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  margin-bottom: var(--space-sm);
+}
+
+.empty-state p {
+  color: var(--text-secondary);
+}
+
+/* Spinner */
+.spinner,
+.spinner-small {
+  border: 3px solid var(--surface-3);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+}
+
+.spinner-small {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Utility Classes */
+kbd {
+  display: inline-block;
+  padding: 0.15rem 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--code-inline);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface-2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  :root {
+    --sidebar-width: 100%;
+  }
+  
+  .app {
+    flex-direction: column;
+  }
+}
