@@ -2,8 +2,8 @@ package main
 
 import (
 	"DocumentationManager/handlers"
-	"net/http"
 	"log"
+	"net/http"
 )
 
 func withCORS(next http.Handler) http.Handler {
@@ -22,8 +22,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/languages", handlers.GetLanguagesAPI)
-	// http.ListenAndServe(":9000", withCORS(mux))
-
+	mux.HandleFunc("/api/languages/{language}/{doc_type}", handlers.GetDocumentsAPI)
 	log.Println("API running on :9000")
 	log.Fatal(http.ListenAndServe(":9000", withCORS(mux))) // ✅ wrap mux
 }

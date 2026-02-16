@@ -2,26 +2,27 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 )
 
-func GetLanguages(root string) []string {
+func GetDirectory(root string) []string {
 	files, err := os.ReadDir(root)
 	sl := make([]string, 0)
-	if err == nil {
-		for _, file := range files {
+	if err != nil {
+		sl = append(sl, "Error reading directory: "+err.Error())
+		return sl
+	} 
+	for _, file := range files {
 			if file.IsDir() {
 				sl = append(sl, file.Name())
 			}
 		}
-	}
 	return sl
 }
 
 func GetLanguagesJSON(root string) ([]byte, error) {
-	languages := GetLanguages(root)
+	languages := GetDirectory(root)
 	return json.Marshal(languages)
 }
 
@@ -39,6 +40,5 @@ func GetLanguagesAPI(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	fmt.Println(string(languages))
 	w.Write(languages)
 }
