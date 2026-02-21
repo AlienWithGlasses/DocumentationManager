@@ -2,8 +2,11 @@ package main
 
 import (
 	"DocumentationManager/handlers"
+	// "fmt"
 	"log"
 	"net/http"
+	// "os"
+	// "regexp"
 )
 
 func withCORS(next http.Handler) http.Handler {
@@ -18,11 +21,14 @@ func withCORS(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+
+
 func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/languages", handlers.GetLanguagesAPI)
 	mux.HandleFunc("/api/languages/{language}/{doc_type}", handlers.GetDocumentsAPI)
+	mux.HandleFunc("/api/languages/{language}/{doc_type}/{doc_id}", handlers.GetDocumentDataAPI)
 	log.Println("API running on :9000")
 	log.Fatal(http.ListenAndServe(":9000", withCORS(mux))) // ✅ wrap mux
 }

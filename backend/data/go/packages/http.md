@@ -1,11 +1,88 @@
 ---
 id: http
 title: net/http
-description: Package http provides HTTP client and server implementations
+description: Package http provides HTTP client and server implementations.
 type: packages
 language: go
 functionCount: 87
 order: 2
+functions:
+  - name: HandleFunc
+    signature: "func HandleFunc(pattern string, handler func(ResponseWriter, *Request))"
+    description: HandleFunc registers the handler function for the given pattern in the DefaultServeMux.
+  - name: Handle
+    signature: "func Handle(pattern string, handler Handler)"
+    description: Handle registers the handler for the given pattern in the DefaultServeMux.
+  - name: ListenAndServe
+    signature: "func ListenAndServe(addr string, handler Handler) error"
+    description: ListenAndServe listens on the TCP network address addr and then calls Serve with handler to handle requests on incoming connections.
+  - name: ListenAndServeTLS
+    signature: "func ListenAndServeTLS(addr string, certFile string, keyFile string, handler Handler) error"
+    description: ListenAndServeTLS acts identically to ListenAndServe, except that it expects HTTPS connections.
+  - name: NewServeMux
+    signature: "func NewServeMux() *ServeMux"
+    description: NewServeMux allocates and returns a new ServeMux.
+  - name: Get
+    signature: "func Get(url string) (resp *Response, err error)"
+    description: Get issues a GET to the specified URL using the DefaultClient. If the response is one of the following redirect codes, Get follows the redirect.
+  - name: Post
+    signature: "func Post(url string, contentType string, body io.Reader) (resp *Response, err error)"
+    description: Post issues a POST to the specified URL using the DefaultClient.
+  - name: PostForm
+    signature: "func PostForm(url string, data url.Values) (resp *Response, err error)"
+    description: PostForm issues a POST to the specified URL, with data's keys and values URL-encoded as the request body.
+  - name: Head
+    signature: "func Head(url string) (resp *Response, err error)"
+    description: Head issues a HEAD to the specified URL using the DefaultClient.
+  - name: NewRequest
+    signature: "func NewRequest(method string, url string, body io.Reader) (*Request, error)"
+    description: NewRequest returns a Request suitable for use with Client.Do or Transport.RoundTrip to make an HTTP client request.
+  - name: NewRequestWithContext
+    signature: "func NewRequestWithContext(ctx context.Context, method string, url string, body io.Reader) (*Request, error)"
+    description: NewRequestWithContext returns a Request suitable for use with Client.Do or Transport.RoundTrip, including the provided context.
+  - name: Error
+    signature: "func Error(w ResponseWriter, error string, code int)"
+    description: Error replies to the request with the specified error message and HTTP code. It does not otherwise end the request; the caller should ensure no further writes are done to w.
+  - name: NotFound
+    signature: "func NotFound(w ResponseWriter, r *Request)"
+    description: NotFound replies to the request with an HTTP 404 not found error.
+  - name: Redirect
+    signature: "func Redirect(w ResponseWriter, r *Request, url string, code int)"
+    description: Redirect replies to the request with a redirect to url, which may be a path relative to the request path.
+  - name: ServeContent
+    signature: "func ServeContent(w ResponseWriter, req *Request, name string, modtime time.Time, content io.ReadSeeker)"
+    description: ServeContent replies to the request using the content in the provided ReadSeeker.
+  - name: ServeFile
+    signature: "func ServeFile(w ResponseWriter, r *Request, name string)"
+    description: ServeFile replies to the request with the contents of the named file or directory.
+  - name: FileServer
+    signature: "func FileServer(root FileSystem) Handler"
+    description: FileServer returns a handler that serves HTTP requests with the contents of the file system rooted at root.
+  - name: StripPrefix
+    signature: "func StripPrefix(prefix string, h Handler) Handler"
+    description: StripPrefix returns a handler that serves HTTP requests by removing the given prefix from the request URL's Path and invoking the handler h.
+  - name: TimeoutHandler
+    signature: "func TimeoutHandler(h Handler, dt time.Duration, msg string) Handler"
+    description: TimeoutHandler returns a Handler that runs h with the given time limit.
+  - name: MaxBytesReader
+    signature: "func MaxBytesReader(w ResponseWriter, r io.ReadCloser, n int64) io.ReadCloser"
+    description: MaxBytesReader is similar to io.LimitReader but is intended for limiting the size of incoming request bodies.
+  - name: SetCookie
+    signature: "func SetCookie(w ResponseWriter, cookie *Cookie)"
+    description: SetCookie adds a Set-Cookie header to the provided ResponseWriter's headers.
+  - name: ParseMultipartForm
+    signature: "func (r *Request) ParseMultipartForm(maxMemory int64) error"
+    description: ParseMultipartForm parses a request body as multipart/form-data.
+  - name: FormValue
+    signature: "func (r *Request) FormValue(key string) string"
+    description: FormValue returns the first value for the named component of the query. POST and PUT body parameters take precedence over URL query string values.
+  - name: Context
+    signature: "func (r *Request) Context() context.Context"
+    description: Context returns the request's context. The returned context is always non-nil; it defaults to the background context.
+metadata:
+  lastModified: "2026-02-17T14:30:00Z"
+  packagePath: net/http
+  version: go1.21
 ---
 
 # net/http

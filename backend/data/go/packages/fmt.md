@@ -1,11 +1,88 @@
 ---
 id: fmt
 title: fmt
-description: Package fmt implements formatted I/O with functions analogous to C's printf and scanf
+description: Package fmt implements formatted I/O with functions analogous to C's printf and scanf.
 type: packages
 language: go
 functionCount: 25
 order: 1
+functions:
+  - name: Print
+    signature: "func Print(a ...any) (n int, err error)"
+    description: Print formats using the default formats for its operands and writes to standard output. Spaces are added between operands when neither is a string.
+  - name: Println
+    signature: "func Println(a ...any) (n int, err error)"
+    description: Println formats using the default formats for its operands and writes to standard output. Spaces are always added between operands and a newline is appended.
+  - name: Printf
+    signature: "func Printf(format string, a ...any) (n int, err error)"
+    description: Printf formats according to a format specifier and writes to standard output.
+  - name: Sprint
+    signature: "func Sprint(a ...any) string"
+    description: Sprint formats using the default formats for its operands and returns the resulting string. Spaces are added between operands when neither is a string.
+  - name: Sprintln
+    signature: "func Sprintln(a ...any) string"
+    description: Sprintln formats using the default formats for its operands and returns the resulting string. Spaces are always added between operands and a newline is appended.
+  - name: Sprintf
+    signature: "func Sprintf(format string, a ...any) string"
+    description: Sprintf formats according to a format specifier and returns the resulting string.
+  - name: Fprint
+    signature: "func Fprint(w io.Writer, a ...any) (n int, err error)"
+    description: Fprint formats using the default formats for its operands and writes to w. Spaces are added between operands when neither is a string.
+  - name: Fprintln
+    signature: "func Fprintln(w io.Writer, a ...any) (n int, err error)"
+    description: Fprintln formats using the default formats for its operands and writes to w. Spaces are always added between operands and a newline is appended.
+  - name: Fprintf
+    signature: "func Fprintf(w io.Writer, format string, a ...any) (n int, err error)"
+    description: Fprintf formats according to a format specifier and writes to w.
+  - name: Scan
+    signature: "func Scan(a ...any) (n int, err error)"
+    description: Scan scans text read from standard input, storing successive space-separated values into successive arguments.
+  - name: Scanf
+    signature: "func Scanf(format string, a ...any) (n int, err error)"
+    description: Scanf scans text read from standard input, storing successive space-separated values into successive arguments as determined by the format.
+  - name: Scanln
+    signature: "func Scanln(a ...any) (n int, err error)"
+    description: Scanln is similar to Scan, but stops scanning at a newline.
+  - name: Sscan
+    signature: "func Sscan(str string, a ...any) (n int, err error)"
+    description: Sscan scans the argument string, storing successive space-separated values into successive arguments.
+  - name: Sscanf
+    signature: "func Sscanf(str string, format string, a ...any) (n int, err error)"
+    description: Sscanf scans the argument string, storing successive space-separated values into successive arguments as determined by the format.
+  - name: Sscanln
+    signature: "func Sscanln(str string, a ...any) (n int, err error)"
+    description: Sscanln is similar to Sscan, but stops scanning at a newline.
+  - name: Fscan
+    signature: "func Fscan(r io.Reader, a ...any) (n int, err error)"
+    description: Fscan scans text read from r, storing successive space-separated values into successive arguments.
+  - name: Fscanf
+    signature: "func Fscanf(r io.Reader, format string, a ...any) (n int, err error)"
+    description: Fscanf scans text read from r, storing successive space-separated values into successive arguments as determined by the format.
+  - name: Fscanln
+    signature: "func Fscanln(r io.Reader, a ...any) (n int, err error)"
+    description: Fscanln is similar to Fscan, but stops scanning at a newline.
+  - name: Errorf
+    signature: "func Errorf(format string, a ...any) error"
+    description: Errorf formats according to a format specifier and returns the string as a value that satisfies error.
+  - name: Stringer
+    signature: "type Stringer interface { String() string }"
+    description: Stringer is implemented by any value that has a String method, which defines the native format for that value.
+  - name: GoStringer
+    signature: "type GoStringer interface { GoString() string }"
+    description: GoStringer is implemented by any value that has a GoString method, which defines the Go syntax for that value.
+  - name: Formatter
+    signature: "type Formatter interface { Format(f State, verb rune) }"
+    description: Formatter is implemented by any value that has a Format method. The implementation controls how State and rune are interpreted, and may call Sprint or Fprint to generate its output.
+  - name: Scanner
+    signature: "type Scanner interface { Scan(state ScanState, verb rune) error }"
+    description: Scanner is implemented by any value that has a Scan method, which scans the input for the representation of a value and stores the result in the receiver.
+  - name: Stringer
+    signature: "type State interface { Write(b []byte) (n int, err error); Width() (wid int, ok bool); Precision() (prec int, ok bool); Flag(c int) bool }"
+    description: State represents the printer state passed to custom formatters. It provides access to the io.Writer interface plus information about the flags and options for the operand's format specifier.
+metadata:
+  lastModified: "2026-02-14T09:15:00Z"
+  packagePath: fmt
+  version: go1.21
 ---
 
 # fmt

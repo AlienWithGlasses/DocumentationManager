@@ -49,7 +49,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
 	"gopkg.in/yaml.v3"
 )
 
@@ -87,30 +86,74 @@ type Document struct {
   Language string `json:"language" yaml:"language"`
   Order int `json:"order" yaml:"order"`
   FunctionCount int `json:"functionCount,omitempty" yaml:"functionCount,omitempty"`
+  Metadata Metadata `json:"metadata,omitempty" yaml:"metadata,omitempty"`
+  FunctionData []FunctionData `json:"functions,omitempty" yaml:"functions,omitempty"`
+  Content       string         `json:"content,omitempty" yaml:"-"`  // ← ADD THIS LINE
 }
-func GetDocumentListStructured(docs []string) ([]Document, error) {
-  docsList := make([]Document, 0)
-  for _, file := range docs {
+type Metadata struct {
+  LastModified string `json:"lastModified" yaml:"lastModified"`
+  PackagePath string `json:"packagePath" yaml:"packagePath"`
+  Version string `json:"version" yaml:"version"`
+}
+type FunctionData struct {
+  Name string `json:"name" yaml:"name"`
+  Signature string `json:"signature" yaml:"signature"`
+  Description string `json:"description" yaml:"description"`
+}
+
+var cachedDocs map[string]Document
+func LoadSingleDocument(filepath string) (*Document, error) {
     var doc Document
-    data, err := os.ReadFile(file)
-    if err != nil{
-      return nil, fmt.Errorf("Error reading file %s: %w", file, err)
+    
+    // Read file
+    data, err := os.ReadFile(filepath)
+    if err != nil {
+        return nil, fmt.Errorf("Error reading file %s: %w", filepath, err)
     }
+    
+    // Split frontmatter and content
     content := string(data)
     parts := strings.Split(content, "---")
-    if len(parts) <3{
-      return nil, fmt.Errorf("Invalid frontmatter format in file %s", file)
+    if len(parts) < 3 {
+        return nil, fmt.Errorf("Invalid frontmatter format in file %s", filepath)
     }
-    frontmatter := parts[1]
-    frontmatter = strings.TrimSpace(frontmatter)
+    
+    // Parse YAML frontmatter
+    frontmatter := strings.TrimSpace(parts[1])
     err = yaml.Unmarshal([]byte(frontmatter), &doc)
     if err != nil {
-      return nil, fmt.Errorf("Error parsing YAML: %w", err)
+        return nil, fmt.Errorf("Error parsing YAML: %w", err)
     }
-    docsList = append(docsList, doc)
-  }
-  return docsList, nil
+    
+    // Get markdown content
+    markdownContent := strings.TrimSpace(parts[2])
+    doc.Content = markdownContent
+    
+    return &doc, nil
 }
+func GetDocumentListStructured(docs []string) ([]Document, error) {
+    cachedDocs = make(map[string]Document)
+    docsList := make([]Document, 0)
+    
+    for _, file := range docs {
+        // Load single document (reusable function!)
+        doc, err := LoadSingleDocument(file)
+        if err != nil {
+            return nil, err  // Error already has filepath info
+        }
+        
+        // Cache it
+        key := fmt.Sprintf("%s/%s/%s", doc.Language, doc.Type, doc.ID)
+        cachedDocs[key] = *doc
+        
+        // Add to list
+        docsList = append(docsList, *doc)
+    }
+    
+    return docsList, nil
+}
+
+
 
 
 func GetDocumentsAPI(w http.ResponseWriter, r *http.Request){
