@@ -19,18 +19,18 @@ A full-stack application for browsing technical documentation across multiple pr
 ├── backend/
 │   ├── main.go              # HTTP server + CORS middleware
 │   ├── handlers/             # API endpoint handlers
-│   │   ├── get_languages.go
-│   │   ├── get_documents_list.go
-│   │   ├── get_document.go
+│   │   ├── get_languages.go       # Discovers languages from data/
+│   │   ├── get_documents_list.go  # Lists docs with YAML frontmatter parsing + caching
+│   │   ├── get_document.go        # Fetches a single doc (cache-first)
 │   │   └── search.go
 │   ├── helpers/              # Utilities (file reading, search indexing)
 │   └── data/                 # Markdown documentation files
-│       ├── golang/
-│       │   ├── basics/       # Getting started, variables, functions, etc.
-│       │   └── packages/     # fmt, net/http, etc.
-│       └── python/
-│           ├── basics/
-│           └── packages/
+│       ├── go/
+│       │   ├── basics/       # getting-started, variables, functions, control-flow, data-structures
+│       │   └── packages/     # fmt, net/http
+│       └── Python/
+│           ├── basics/       # getting-started, variables, functions, control-flow, data-structures
+│           └── packages/     # json, os
 ├── frontend/
 │   └── src/
 │       ├── App.jsx
@@ -73,7 +73,7 @@ Dev server starts on **http://localhost:3500**
 |--------|----------|-------------|
 | GET | `/api/languages` | List available languages |
 | GET | `/api/languages/{language}/{type}` | List documents for a language/type |
-| GET | `/api/languages/{language}/{type}/{docId}` | Get a single document |
+| GET | `/api/languages/{language}/{type}/{docId}` | Get a single document with full content |
 | GET | `/api/languages/{language}/search?q={query}` | Fuzzy search within a language |
 
 ## Adding Documentation
@@ -96,9 +96,9 @@ New languages are discovered automatically by the backend — no code changes ne
 
 ## Currently Supported Languages
 
-- **Go** — basics + packages (fmt, net/http)
-- **Python** — structure in place, documentation coming soon
+- **Go** — 5 basics (getting started, variables, functions, control flow, data structures) + 2 packages (fmt, net/http)
+- **Python** — 5 basics (getting started, variables, functions, control flow, data structures) + 2 packages (json, os)
 
 ## Status
 
-Work in progress. The backend handlers are being implemented incrementally as a Go learning exercise. The frontend is functional and connects to the API via Vite's dev proxy.
+Core API is functional. The languages, document list, and document detail endpoints are fully implemented with YAML frontmatter parsing and in-memory caching. Search is next on the list. The frontend connects to the API via Vite's dev proxy and renders markdown with syntax highlighting.
